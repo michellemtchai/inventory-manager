@@ -15,9 +15,9 @@ cp ./docker/dev.env .env
 copy .\docker\dev.env .env
 ```
 
-Then, open up the newly created file `.env`. Replace the value for `OPENWEATHER_SECRET` with your own OpenAI secret API key.
+Then, open up the newly created file `.env`. Replace the value for `OPENWEATHER_SECRET` with your own OpenWeather secret API key.
 
-You can also modify the `RAILS_PORT` and `DB_PORT` in `.env` if the port is not available.
+You can also modify the `RAILS_PORT` and `POSTGRES_PORT` in `.env` if the port is not available.
 
 To start the app, run the following:
 
