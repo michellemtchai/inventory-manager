@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+    db:
+        image: postgres
+        volumes:
+            - pgdata:${PGDATA}
+        ports:
+            - ${POSTGRES_PORT}:${POSTGRES_PORT}
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            PGDATA: ${PGDATA}
+    inventory_manager:
+        build:
+            context: ..
+            dockerfile: ./docker/dev.dockerfile
+        volumes:
+            - ..:/app
+            - bundles:/usr/local/bundle
+        command: start.sh
+        ports:
+            - ${RAILS_PORT}:${RAILS_PORT}
+        environment:
+            RAILS_ENV: ${RAILS_ENV}
+            SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+            DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+        depends_on:
+            - db
+volumes:
+    pgdata:
+    bundles:
