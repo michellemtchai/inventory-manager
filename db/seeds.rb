@@ -37,10 +37,49 @@ cities = [
     long: -99.150344
   },
 ]
+products = [
+  {
+    name: 'Cheerios',
+    description: 'Cereal from General Mills.',
+  },
+  {
+    name: "Fruity Loops",
+    description: "Cereal from Kellogg's.",
+  },
+  {
+    name: 'Lucky Charms',
+    description: 'Cereal from General Mills.',
+  },
+]
+inventory_items = [
+  {
+    product: 'Cheerios',
+    city: 'Mexico City',
+    count: 100,
+  },
+  {
+    product: 'Cheerios',
+    city: 'Shanghai',
+    count: 3200,
+  },
+  {
+    product: 'Fruity Loops',
+    city: 'São Paulo',
+    count: 30,
+  },
+  {
+    product: 'Lucky Charms',
+    city: 'Delhi',
+    count: 7632,
+  },
+]
+
 countries_csv = Rails.root.join('db', 'seeds', 'countries.csv')
 
 if Country.count == 0 && City.count == 0
   country_map = {}
+  cities_map = {}
+  products_map = {}
   countries = cities.map { |city| city[:country] }
   CSV.foreach(countries_csv, headers: true) do |row|
     country = Country.create!(row.to_hash)
@@ -48,7 +87,26 @@ if Country.count == 0 && City.count == 0
       country_map[country.name] = country
     end
   end
-  City.create!(cities.map{ |city| { **city, country: country_map[city[:country]] } })
+
+  cities.each do |city|
+    cities_map[city[:name]] = City.create!({
+      **city,
+      country: country_map[city[:country]]
+    })
+  end
+
+  products.each do |product|
+    products_map[product[:name]] = Product.create!(product)
+  end
+
+  inventory_items.each do |item|
+    InventoryItem.create!({
+      **item,
+      product: products_map[item[:product]],
+      city: cities_map[item[:city]]
+    })
+  end
+
   puts "Seeding completed!"
 else
   puts "Seeding already done!"
