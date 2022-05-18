@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 
 class InventoryItem < ApplicationRecord
+  attribute :weather
   belongs_to :product
   belongs_to :city
   validates :count, :presence => true,
@@ -21,6 +22,7 @@ class InventoryItem < ApplicationRecord
         Net::HTTP.get_response(URI(request_url))
     end
     body = JSON.parse(response.body)
+    p body
     body["daily"][0]["weather"][0]["description"]
   end
 end
