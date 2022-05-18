@@ -17,12 +17,19 @@ class InventoryItem < ApplicationRecord
   end
 
   def weather
-    request_url = "https://api.openweathermap.org/data/3.0/onecall?lat=#{city.lat}&lon=#{city.long}&appid=#{ENV["OPENWEATHER_SECRET"]}&exclude=current,minutely,hourly,alerts"
-    response = Rails.cache.fetch(request_url, :expires => 4.hour) do
-        Net::HTTP.get_response(URI(request_url))
+    begin
+      request_url = "https://api.openweathermap.org/data/2.5/weather?lat=#{city.lat}&lon=#{city.long}&appid=#{ENV["OPENWEATHER_SECRET"]}"
+      response = Rails.cache.fetch(request_url, :expires => 4.hour) do
+          Net::HTTP.get_response(URI(request_url))
+      end
+      if response.code == "200"
+        body = JSON.parse(response.body)
+        body["weather"][0]["description"]
+      else
+        "Error: #{response.message}"
+      end
+    rescue =>e
+      "Error: #{e.message}"
     end
-    body = JSON.parse(response.body)
-    p body
-    body["daily"][0]["weather"][0]["description"]
   end
 end
