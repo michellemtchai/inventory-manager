@@ -114,7 +114,7 @@ class CitiesController < ApplicationController
               long: city["lon"],
             }
           else
-            { error: "no such city" }
+            { error: "There's no such city." }
           end
         else
           { error: response.message }
@@ -125,7 +125,7 @@ class CitiesController < ApplicationController
     end
 
     def render_error(formatted_params, template)
-      @city.errors.add(:name, :invalid, message: formatted_params[:error])
+      @city.errors.add(:name, :invalid, message: ": Error - #{formatted_params[:error]}")
       respond_to do |format|
         format.html { render template, status: :unprocessable_entity }
         format.json { render json: @city.errors, status: :unprocessable_entity }
