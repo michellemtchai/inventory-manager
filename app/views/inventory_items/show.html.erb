@@ -1,0 +1,22 @@
+<p style="color: green"><%= notice %></p>
+
+<% @inventory_page = 'show' %>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Product ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Count</th>
+        <th>Location</th>
+        <th>Weather</th>
+    </tr>
+    <%= render @inventory_item %>
+</table>
+<br>
+<div>
+  <%= link_to "Edit this inventory item", edit_inventory_item_path(@inventory_item) %> |
+  <%= link_to "Back to inventory items", inventory_items_path %>
+
+  <%= button_to "Destroy this inventory item", @inventory_item, method: :delete %>
+</div>

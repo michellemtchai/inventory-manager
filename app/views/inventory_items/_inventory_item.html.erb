@@ -1,0 +1,19 @@
+<tr id="<%= dom_id inventory_item %>">
+    <td><%= inventory_item.id %></td>
+    <td><%= inventory_item.product.id %></td>
+    <td><%= inventory_item.product.name %></td>
+    <td><%= inventory_item.product.description %></td>
+    <% case @inventory_page %>
+    <% when 'index' %>
+        <td><%= inventory_item.count %></td>
+        <td><%= inventory_item.location %></td>
+        <td><%= inventory_item.weather %></td>
+        <td>
+            <%= link_to "Show Item", inventory_item %>
+        </td>
+    <% when 'show' %>
+        <td><%= inventory_item.count %></td>
+        <td><%= inventory_item.location %></td>
+        <td><%= inventory_item.weather %></td>
+    <% end %>
+</tr>

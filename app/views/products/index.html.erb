@@ -10,7 +10,7 @@
         <th>Description</th>
         <th>Actions</th>
     </tr>
-    <% @products.each do |product| %>
+    <% @products.order(:id).each do |product| %>
         <%= render product %>
     <% end %>
 </table>

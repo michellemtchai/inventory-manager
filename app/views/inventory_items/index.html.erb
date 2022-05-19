@@ -1,0 +1,22 @@
+<p style="color: green"><%= notice %></p>
+
+<h2>Inventory Items</h2>
+
+<% @inventory_page = 'index' %>
+<table id="inventory_items">
+    <tr>
+        <th>ID</th>
+        <th>Product ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Count</th>
+        <th>Location</th>
+        <th>Weather</th>
+        <th>Actions</th>
+    </tr>
+    <% @inventory_items.order(:id).each do |inventory_item| %>
+        <%= render inventory_item %>
+    <% end %>
+</table>
+
+<%= link_to "New inventory item", new_inventory_item_path %>

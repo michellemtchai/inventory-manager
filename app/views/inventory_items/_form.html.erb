@@ -1,0 +1,30 @@
+<%= form_with(model: inventory_item) do |form| %>
+  <% if inventory_item.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(inventory_item.errors.count, "error") %> prohibited this inventory_item from being saved:</h2>
+
+      <ul>
+        <% inventory_item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :product_id %><br>
+    <%= form.collection_select :product_id, Product.order(:name),:id,:name_with_id %>
+  </div>
+  <div>
+    <%= form.label :city_id %><br>
+    <%= form.collection_select :city_id, City.order(:name),:id,:label %>
+  </div>
+  <div>
+    <%= form.label :count %><br>
+    <%= form.number_field :count %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
