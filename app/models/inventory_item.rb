@@ -7,6 +7,7 @@ class InventoryItem < ApplicationRecord
   belongs_to :city
   validates :count, :presence => true,
     numericality: { greater_than_or_equal_to: 0 }
+  validates_uniqueness_of :product_id, :scope => [:city_id]
 
   def location
     city.label

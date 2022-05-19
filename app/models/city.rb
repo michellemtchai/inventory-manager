@@ -3,6 +3,7 @@ class City < ApplicationRecord
   validates :name, :presence => true
   validates :lat, :presence => true
   validates :long, :presence => true
+  validates_uniqueness_of :country_id, :scope => [:name, :region]
 
   def label
     if region.nil?
