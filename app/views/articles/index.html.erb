@@ -1,31 +1,6 @@
-<% if InventoryItem.count > 0 %>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Product ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Count</th>
-            <th>Location</th>
-            <th>Weather</th>
-            <th>Actions</th>
-        </tr>
-        <% InventoryItem.all.map do |item| %>
-            <tr>
-                <td><%= item.id %></td>
-                <td><%= item.product.id %></td>
-                <td><%= item.product.name %></td>
-                <td><%= item.product.description %></td>
-                <td><%= item.count %></td>
-                <td><%= item.location %></td>
-                <td><%= item.weather %></td>
-                <td>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </td>
-            </tr>
-        <% end %>
-    </table>
-<% else %>
-    <p>There's no inventory items.</p>
-<% end %>
+<p>You can see/modify the following models:</p>
+<ul>
+    <li><%= link_to "Inventory Items", inventory_items_path %></li>
+    <li><%= link_to "Products", products_path %></li>
+    <li>Cities</li>
+</ul>

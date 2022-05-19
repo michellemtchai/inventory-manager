@@ -1,20 +1,25 @@
 <p style="color: green"><%= notice %></p>
 
+<p><%= link_to "Back to Home", root_path %></p>
+
 <h2>Products</h2>
 
 <% @product_page = 'index' %>
-<table id="products">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    <% @products.order(:id).each do |product| %>
-        <%= render product %>
-    <% end %>
-</table>
-
+<% if @products.size > 0 %>
+    <table id="products">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        <% @products.order(:id).each do |product| %>
+            <%= render product %>
+        <% end %>
+    </table>
+<% else %>
+    <p>There's no products.</p>
+<% end %>
 <p>
     <%= link_to "New product", new_product_path %>
 </p>

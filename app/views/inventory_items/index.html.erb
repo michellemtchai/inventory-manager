@@ -1,22 +1,28 @@
 <p style="color: green"><%= notice %></p>
+<p><%= link_to "Back to Home", root_path %></p>
 
 <h2>Inventory Items</h2>
 
 <% @inventory_page = 'index' %>
-<table id="inventory_items">
-    <tr>
-        <th>ID</th>
-        <th>Product ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Count</th>
-        <th>Location</th>
-        <th>Weather</th>
-        <th>Actions</th>
-    </tr>
-    <% @inventory_items.order(:id).each do |inventory_item| %>
-        <%= render inventory_item %>
-    <% end %>
-</table>
+<% if @inventory_items.size > 0 %>
+    <table id="inventory_items">
+        <tr>
+            <th>ID</th>
+            <th>Product ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Count</th>
+            <th>Location</th>
+            <th>Weather</th>
+            <th>Actions</th>
+        </tr>
+        <% @inventory_items.order(:id).each do |inventory_item| %>
+            <%= render inventory_item %>
+        <% end %>
+    </table>
+<% else %>
+    <p>There's no inventory items.</p>
+<% end %>
+
 
 <%= link_to "New inventory item", new_inventory_item_path %>
