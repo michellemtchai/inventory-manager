@@ -1,0 +1,9 @@
+<tr id="<%= dom_id product %>">
+    <td><%= product.id %></td>
+    <td><%= product.name %></td>
+    <td><%= product.description %></td>
+    <% case @product_page %>
+    <% when 'index' %>
+        <td><%= link_to "See product", product %></td>
+    <% end %>
+</tr>

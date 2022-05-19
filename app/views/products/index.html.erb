@@ -1,0 +1,20 @@
+<p style="color: green"><%= notice %></p>
+
+<h2>Products</h2>
+
+<% @product_page = 'index' %>
+<table id="products">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    <% @products.each do |product| %>
+        <%= render product %>
+    <% end %>
+</table>
+
+<p>
+    <%= link_to "New product", new_product_path %>
+</p>
