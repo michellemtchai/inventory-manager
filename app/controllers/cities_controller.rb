@@ -1,3 +1,6 @@
+require 'net/http'
+require 'json'
+
 class CitiesController < ApplicationController
   before_action :set_city, only: %i[ show edit update destroy ]
 
@@ -21,28 +24,39 @@ class CitiesController < ApplicationController
 
   # POST /cities or /cities.json
   def create
-    @city = City.new(city_params)
+    formatted_params = lookup_city(city_params)
+    if formatted_params[:error].present?
+      @city = City.new
+      render_error(formatted_params, :new)
+    else
+      @city = City.new(formatted_params)
 
-    respond_to do |format|
-      if @city.save
-        format.html { redirect_to city_url(@city), notice: "City was successfully created." }
-        format.json { render :show, status: :created, location: @city }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @city.errors, status: :unprocessable_entity }
+      respond_to do |format|
+        if @city.save
+          format.html { redirect_to city_url(@city), notice: "City was successfully created." }
+          format.json { render :show, status: :created, location: @city }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @city.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
 
   # PATCH/PUT /cities/1 or /cities/1.json
   def update
-    respond_to do |format|
-      if @city.update(city_params)
-        format.html { redirect_to city_url(@city), notice: "City was successfully updated." }
-        format.json { render :show, status: :ok, location: @city }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @city.errors, status: :unprocessable_entity }
+    formatted_params = lookup_city(city_params)
+    if formatted_params[:error].present?
+      render_error(formatted_params, :edit)
+    else
+      respond_to do |format|
+        if @city.update(formatted_params)
+          format.html { redirect_to city_url(@city), notice: "City was successfully updated." }
+          format.json { render :show, status: :ok, location: @city }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @city.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -65,10 +79,56 @@ class CitiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def city_params
-      values = params.fetch(:city, {}).permit(:name, :region, :country_id, :lat, :long)
+      values = params.fetch(:city, {}).permit(:name, :region, :country_id)
       if values[:region].is_a?(String) && values[:region].strip.size == 0
         values[:region] = nil
       end
       values
+    end
+
+    def lookup_city(params)
+      name = params[:name]
+      region = params[:region]
+      country = Country.find(params[:country_id])
+      location = if region.nil?
+        "#{name},#{country.code}"
+      else
+        "#{name},#{region},#{country.code}"
+      end
+
+      request_url = "http://api.openweathermap.org/geo/1.0/direct?q=#{location}&limit=1&appid=#{ENV["OPENWEATHER_SECRET"]}"
+
+      begin
+        response = Rails.cache.fetch(request_url, :expires => 1.day) do
+            Net::HTTP.get_response(URI(request_url))
+        end
+        if response.code == "200"
+          body = JSON.parse(response.body)
+          if body.size > 0 && body[0]["name"] == name
+            city = body[0]
+            {
+              name: city["name"],
+              region: city["state"],
+              country: country,
+              lat: city["lat"],
+              long: city["lon"],
+            }
+          else
+            { error: "no such city" }
+          end
+        else
+          { error: response.message }
+        end
+      rescue =>e
+        { error: e.message }
+      end
+    end
+
+    def render_error(formatted_params, template)
+      @city.errors.add(:name, :invalid, message: formatted_params[:error])
+      respond_to do |format|
+        format.html { render template, status: :unprocessable_entity }
+        format.json { render json: @city.errors, status: :unprocessable_entity }
+      end
     end
 end

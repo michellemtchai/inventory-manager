@@ -23,15 +23,7 @@
     <%= form.label :country_id %><br>
     <%= form.collection_select :country_id, Country.order(:name),:id,:name %>
   </div>
-  <div>
-    <%= form.label :lat %><br>
-    <%= form.number_field :lat, step: 0.5 %>
-  </div>
-  <div>
-    <%= form.label :long %><br>
-    <%= form.number_field :long, step: 0.5 %>
-  </div>
-
+  <br>
   <div>
     <%= form.submit %>
   </div>
