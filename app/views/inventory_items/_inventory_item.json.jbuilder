@@ -1,2 +1,4 @@
-json.extract! inventory_item, :id, :created_at, :updated_at
-json.url inventory_item_url(inventory_item, format: :json)
+json.(inventory_item, :id, :count, :location, :weather)
+json.product do
+  json.(inventory_item.product, :id, :name, :description)
+end

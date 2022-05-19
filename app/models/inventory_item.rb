@@ -8,10 +8,6 @@ class InventoryItem < ApplicationRecord
   validates :count, :presence => true,
     numericality: { greater_than_or_equal_to: 0 }
 
-  def as_json
-    super(:only => [:product, :count], :methods => [:location, :weather])
-  end
-
   def location
     city.label
   end
