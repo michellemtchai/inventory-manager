@@ -1,0 +1,12 @@
+<tr id="<%= dom_id city %>">
+    <td><%= city.id %></td>
+    <td><%= city.name %></td>
+    <td><%= city.region.nil? ? 'N/A': city.region %></td>
+    <td><%= city.country.name %></td>
+    <td><%= city.lat %></td>
+    <td><%= city.long %></td>
+    <% case @city_page %>
+    <% when 'index' %>
+        <td><%= link_to "Show this city", city %></td>
+    <% end %>
+</tr>

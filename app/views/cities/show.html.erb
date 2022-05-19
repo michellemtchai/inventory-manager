@@ -1,0 +1,22 @@
+<p style="color: green"><%= notice %></p>
+
+<p><%= link_to "Back to Home", root_path %></p>
+
+<table id="cities">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Region</th>
+        <th>Country</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+    </tr>
+    <%= render @city %>
+</table>
+<br>
+<div>
+  <%= link_to "Edit this city", edit_city_path(@city) %> |
+  <%= link_to "Back to cities", cities_path %>
+
+  <%= button_to "Destroy this city", @city, method: :delete %>
+</div>
